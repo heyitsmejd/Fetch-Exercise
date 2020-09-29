@@ -41,7 +41,9 @@ export default {
     '~/api/index.js',
   ],
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    baseURL:"/"
+  },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
