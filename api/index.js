@@ -10,8 +10,10 @@ app.get('/orders', (req, res) => {
         // pass our data as json
         res.json(resp.data)
     }).catch(e => {
+        console.log(e)
         // if we got an error, throw an error message to the frontend
         res.status(500)
+        res.json({error: e})
     })
 })
 

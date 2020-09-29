@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <table class="table" id="orders" >
-      <thead>
+    <table class="table" id="orders">
+      <thead id="fixed-header">
         <tr>
           <th>Id</th>
           <th>Name</th>
@@ -9,9 +9,14 @@
         </tr>
       </thead>
       <tbody>
-        <template v-if="loading">
+        <template v-if="loading && !requestError">
           <tr>
             <td>Loading orders..</td>
+          </tr>
+        </template>
+        <template v-if="!loading && requestError">
+          <tr>
+            <td>{{requestError}}</td>
           </tr>
         </template>
         <template v-else>
@@ -36,23 +41,28 @@ export default {
     }
   },
   mounted() {
-    // Call our endpoint that fetches "https://fetch-hiring.s3.amazonaws.com/hiring.json"
-    // This is just a small back end to retrieve the json, since we can't do it locally due to CORS issues.
-    this.$axios.get('/api/orders').then(resp => {
-      // Filter and sort the returned data
-      this.orders = this.sortOrders(this.filterNullBlank(resp.data))
-
-      // turn off loading
-      this.loading = false
-    }).catch(e => {
-      this.requestError = e
-      this.loading = false
-    })
+    this.fetchOrders()
   },
   methods: {
     // filterNullBlank takes an array and returns an array where the name is not null and the length is greater than 0.
     filterNullBlank(orders){
       return orders.filter(order => order.name !== null && order.name.length > 0)
+    },
+    fetchOrders() {
+      // make sure to start loading
+      this.loading = true
+      // Call our endpoint that fetches "https://fetch-hiring.s3.amazonaws.com/hiring.json"
+      // This is just a small back end to retrieve the json, since we can't do it locally due to CORS issues.
+      this.$axios.get('/api/orders').then(resp => {
+        // Filter and sort the returned data
+        this.orders = this.sortOrders(this.filterNullBlank(resp.data))
+
+        // turn off loading
+        this.loading = false
+      }).catch(e => {
+        this.requestError = e
+        this.loading = false
+      })
     },
     // sortOrders sorts in two ways, firstly ascending by listId. However, some listids are the same, in which case it'll check the item name and sort by that.
     sortOrders(orders){
@@ -70,3 +80,16 @@ export default {
   }
 }
 </script>
+
+<style>
+#fixed-header {
+    position: fixed;
+    height: 40px;
+    background: white !important;
+}
+tbody {
+    display: block;
+    margin-top: 40px;
+}
+
+</style>
