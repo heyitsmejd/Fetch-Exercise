@@ -9,7 +9,7 @@ The requirements for the project are as following:
     <li>Filter out any items where "name" is blank or null.</li>
 </ul>
 
-Originally I opted to do it using no frameworks; However, the host that contains the json file requires CORS, so I had to create a mini backend to retrive the file, and then pass it to the frontend. Nuxt.js for Vue handles a lot of that legwork for me, so I opted for that route to get it done quickly. 
+Originally I opted to do it using no frameworks; However, the host that contains the json file requires CORS, so I had to create a mini backend to retrieve the file, and then pass it to the frontend. Nuxt.js for Vue handles a lot of that legwork for me, so I opted for that route to get it done quickly. 
 
 
 ## You can view this application online at
